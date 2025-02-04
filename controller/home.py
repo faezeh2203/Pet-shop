@@ -14,6 +14,8 @@ class Home:
             breed_data = response.json()  # دریافت داده‌ها از API
             breeds = breed_data['message']  # استخراج نژادها از پیام
 
+            breeds = dict(list(breeds.items())[:10])
+
             # افزودن لینک تصویر برای هر نژاد
             breed_images = {}
             for breed in breeds:

@@ -14,6 +14,9 @@ class Users(db.Model, UserMixin):
     avatar = Column(String(110) , default='/static/img/avatar.png')
     phone = Column(String(20), default='0')
     created_at = Column(DateTime(), default=datetime.utcnow)
+    orders = db.relationship('Order', backref='user', lazy=True)
+    cart = db.relationship('Cart', backref='user', lazy=True)
+
 
     @property
     def passwd(self):
