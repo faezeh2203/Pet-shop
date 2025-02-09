@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user ,current_user ,logout_user ,login_required
 import os
+from flask_login import login_required, current_user
 
 # ایجاد و پیکربندی برنامه
 app = Flask(__name__)
@@ -31,7 +32,7 @@ login.login_message_category = 'info'
 login.init_app(app)
 
 # Import Models
-from models import User, Product, Order, OrderProduct, Cart
+from models import User, Product, Order, OrderProduct, Cart, CartItem
 
 # Import Controller
 from controller import home , user , auth , admin, cart
@@ -77,6 +78,10 @@ app.add_url_rule('/account/cart', 'cart', cartController.cart)
 app.add_url_rule('/account/cart/add/<int:product_id>', 'add_to_cart', cartController.add_to_cart)
 app.add_url_rule('/account/cart/remove/<int:cart_id>', 'remove_from_cart', cartController.remove_from_cart)
 app.add_url_rule('/account/cart/update/<int:cart_id>/<int:quantity>', 'update_cart', cartController.update_cart)
+
+# Route Order (برای ثبت سفارشات و نمایش آن‌ها)
+app.add_url_rule('/account/orders', 'orders', userController.orders)
+app.add_url_rule('/account/order/<int:order_id>', 'order_detail', userController.order_detail)
 
 
 if __name__ == '__main__':

@@ -6,6 +6,8 @@ from flask_login import UserMixin
 
 
 class Users(db.Model, UserMixin):
+    __tablename__ = 'users'
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(110))
     email = Column(String(110), unique=True)
@@ -15,7 +17,7 @@ class Users(db.Model, UserMixin):
     phone = Column(String(20), default='0')
     created_at = Column(DateTime(), default=datetime.utcnow)
     orders = db.relationship('Order', backref='user', lazy=True)
-    cart = db.relationship('Cart', backref='user', lazy=True)
+    cart = db.relationship('Cart', backref='user', uselist=False)
 
 
     @property
@@ -29,3 +31,5 @@ class Users(db.Model, UserMixin):
     def IsOriginalPassword(self, password):
         return check_password_hash(self._passwd, password)
 
+    def __repr__(self):
+        return f"<User {self.name} ({self.email})>"

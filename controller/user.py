@@ -1,6 +1,6 @@
 from app import db , allow_extension , app
 from werkzeug.utils import secure_filename
-from models import User
+from models import User, Order
 from flask import Flask , render_template , request , redirect , url_for , flash , abort
 from flask_login import LoginManager , login_user , current_user , logout_user , login_required
 from validators.Auth import EditProfile , ChangePassword
@@ -75,3 +75,16 @@ class Account:
                 return redirect(url_for('account_info'))
             
         return render_template('/account/edit.html' , form = form)
+
+
+    @login_required
+    def orders(self):
+        # گرفتن تمام سفارشات کاربر
+        orders = Order.query.filter_by(user_id=current_user.id).all()
+        return render_template('account/orders.html', orders=orders)
+    
+    @login_required
+    def order_detail(self, order_id):
+        # گرفتن جزئیات سفارش
+        order = Order.query.get_or_404(order_id)
+        return render_template('account/order_detail.html', order=order)
